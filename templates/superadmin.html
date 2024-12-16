@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Admin Panel</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #2b2b2b;
+            color: #ffffff;
+            font-family: "Arial", sans-serif;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #3a3a3a;
+            color: #ffffff;
+        }
+
+        .header-title {
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .tab {
+            padding: 10px;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .tab:hover {
+            background-color: #464646;
+        }
+        .tab.active {
+            background-color: #0080ff;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #555;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            border-right: 1px solid #555;
+        }
+
+        th {
+            background-color: #222;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+
+        .section {
+            display: none;
+            margin-top: 20px;
+        }
+        .section.active {
+            display: block;
+        }
+        .tab {
+            padding: 10px;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .tab:hover {
+            background-color: #464646;
+        }
+
+        .tab:active {
+            background-color: #0080ff;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-field {
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+
+        .search-button {
+            padding: 5px 10px;
+            background-color: #0080ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0066cc;
+        }
+
+        .section.active {
+            padding-top: 20px;
+        }
+
+        .section.active h2 {
+            margin-top: 0;
+        }
+
+        .section.active form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section.active label {
+            margin-top: 10px;
+        }
+
+        .section.active input[type="text"] {
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+
+        .section.active button[type="submit"] {
+            padding: 5px 10px;
+            background-color: #0080ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .section.active button[type="submit"]:hover {
+            background-color: #0066cc;
+        }
+        .logout-form {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .logout-button {
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="header-title">Super Admin Panel</h1>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showSection('assign-admin')">Assign Administrator</div>
+        <div class="tab" onclick="showSection('manage-users')">Manage Users Database</div>
+        <a href="/home_admin" class="tab">Manage System Database</a>
+    </div>
+
+    <div id="assign-admin" class="section active">
+        <h2>Assign Administrator</h2>
+        <form action="/assign_admin" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <button type="submit" class="tab">Assign</button>
+        </form>
+        {% if success %}
+            <p style="color: green;">Admin assigned.</p>
+        {% endif %}
+        {% if error %}
+            <p style="color: green;">Admin is not assigned.</p>
+        {% endif %}
+    </div>
+
+    <div id="manage-users" class="section">
+        <h2>Manage Users Database</h2>
+        <div id="delete-user-panel" style="display: none;">
+            <form onsubmit="deleteUser(event)">
+                <label for="delete-username">Username:</label>
+                <input type="text" id="delete-username" name="delete-username" required>
+                <button type="submit" class="tab">Delete</button>
+            </form>
+        </div>
+        <button class="tab" onclick="toggleAddUserPanel(event)">Add User</button>
+
+    <div id="add-user-panel" style="display: none;">
+        <form onsubmit="submitForm(event)">
+            <label for="new-username">Username:</label>
+            <input type="text" id="new-username" name="new-username" required>
+            <label for="new-password">Password:</label>
+            <input type="password" id="new-password" name="new-password" required>
+            <label for="new-role">Role:</label>
+            <select id="new-role" name="new-role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <label for="new-approved">Is Approved:</label>
+            <input type="checkbox" id="new-approved" name="new-approved">
+            <button type="submit" class="tab">Add</button>
+        </form>
+    </div>
+
+        <button class="tab" onclick="toggleDeleteUserPanel(event)">Delete User</button>
+        <div id="user-search">
+            <button class="tab" onclick="toggleSearchInput()">Search for user</button>
+            <div id="search-input" style="display: none;">
+                <label for="search-username">Username:</label>
+                <input type="text" id="search-username">
+                <button class="tab" onclick="searchUser()">Search</button>
+            </div>
+        </div>
+        <button class="tab" onclick="refreshUsersTable()">Refresh</button>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th>Is Approved</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ "Yes" if user[4] else "No" }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+    <form class="logout-form" action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+    </form>
+
+    <script>
+        function refreshUsersTable() {
+            const xhr = new XMLHttpRequest();
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Обработайте успешный ответ
+                    const response = xhr.responseText;
+                    const usersTable = document.querySelector('#manage-users table');
+                    usersTable.innerHTML = response;
+                } else {
+                    // Обработайте ошибку
+                    console.error('Request failed. Error code:', xhr.status);
+                }
+            };
+
+            xhr.open('GET', '/get_updated_users_table');
+            xhr.send();
+        }
+        function deleteUser(event) {
+          event.preventDefault();
+
+          const username = document.getElementById('delete-username').value;
+
+          const formData = new FormData();
+          formData.append('username', username);
+
+          const xhr = new XMLHttpRequest();
+
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              // Handle the successful response
+              console.log(xhr.responseText);
+
+              // Remove the deleted user from the table
+              const table = document.querySelector('table');
+              const rows = table.getElementsByTagName('tr');
+              for (let i = 2; i < rows.length; i++) {
+                const usernameCell = rows[i].getElementsByTagName('td')[0];
+                if (usernameCell) {
+                  const cellUsername = usernameCell.textContent || usernameCell.innerText;
+                  if (cellUsername === username) {
+                    table.deleteRow(i);
+                    break;
+                  }
+                }
+              }
+            } else {
+              // Handle the error
+              console.error('Request failed. Error code:', xhr.status);
+            }
+          };
+
+          // Send a POST request to the '/delete_user' URL
+          xhr.open('POST', '/delete_user');
+          xhr.send(formData);
+        }
+
+        function toggleDeleteUserPanel(event) {
+          event.preventDefault(); // Prevent the default behavior of the button click
+          var deleteUserPanel = document.getElementById("delete-user-panel");
+          deleteUserPanel.style.display = deleteUserPanel.style.display === "none" ? "block" : "none";
+        }
+
+        function toggleAddUserPanel(event) {
+            event.preventDefault(); // Prevent the default behavior of the button click
+            var addUserPanel = document.getElementById("add-user-panel");
+            addUserPanel.style.display = addUserPanel.style.display === "none" ? "block" : "none";
+        }
+        function submitForm(event) {
+          event.preventDefault(); // Prevent the default behavior of the form submission
+
+          // Get the form input values
+          const username = document.getElementById('new-username').value;
+          const password = document.getElementById('new-password').value;
+          const role = document.getElementById('new-role').value;
+          const approved = document.getElementById('new-approved').checked;
+
+          // Create a FormData object and add the form values
+          const formData = new FormData();
+          formData.append('new_username', username);
+          formData.append('new_password', password);
+          formData.append('new_role', role);
+          formData.append('new_approved', approved);
+
+          // Create an XMLHttpRequest object
+          const xhr = new XMLHttpRequest();
+
+          // Set the load event handler
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              // Handle the successful response
+              console.log(xhr.responseText);
+
+              // Update the table with the new user data
+              const table = document.querySelector('table');
+              const newRow = table.insertRow(-1);
+              newRow.innerHTML = `
+                <td>${username}</td>
+                <td>${password}</td>
+                <td>${role}</td>
+                <td>${approved ? 'Yes' : 'No'}</td>
+              `;
+            } else {
+              // Handle the error
+              console.error('Request failed. Error code:', xhr.status);
+            }
+          };
+
+          // Send a POST request to the '/add_user' URL
+          xhr.open('POST', '/add_user');
+          xhr.send(formData);
+          closeAddUserPanel();
+
+        }
+
+        function closeAddUserPanel() {
+            const addUserPanel = document.getElementById("add-user-panel");
+            addUserPanel.style.display = "none";
+        }
+
+        function searchUser() {
+            var searchUsername = document.getElementById("search-username").value;
+            var table = document.querySelector("table");
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var usernameCell = rows[i].getElementsByTagName("td")[0];
+                if (usernameCell) {
+                    var username = usernameCell.textContent || usernameCell.innerText;
+                    if (username === searchUsername) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        function toggleSearchInput() {
+            var searchInput = document.getElementById('search-input');
+            searchInput.style.display = (searchInput.style.display === 'none') ? 'block' : 'none';
+        }
+        function redirectToPage(pageUrl) {
+            window.location.href = pageUrl;
+          }
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.getElementsByClassName('section');
+            for (let i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            selectedSection.classList.add('active');
+
+            // Update active tab styling
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            const selectedTab = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            selectedTab.classList.add('active');
+        }
+    </script>
+</body>
+</html>

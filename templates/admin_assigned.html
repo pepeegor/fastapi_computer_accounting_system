@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Assigned</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2b2b2b;
+            color: #ffffff;
+            font-family: "Arial", sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            text-align: center;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+        .button-container a {
+            padding: 8px;
+            background-color: #0080ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: "Arial", sans-serif;
+        }
+        .button-container a:hover {
+            background-color: #0066cc;
+        }
+        .logout-form {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .logout-button {
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Assigned</h1>
+        <p>Admin has been successfully assigned.</p>
+        <div class="button-container">
+            <a href="/superadmin">Go to Superadmin Page</a>
+        </div>
+    </div>
+    <form class="logout-form" action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+    </form>
+</body>
+</html>

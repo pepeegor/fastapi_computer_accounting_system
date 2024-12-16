@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2b2b2b;
+            color: #ffffff;
+            font-family: "Arial", sans-serif;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            padding: 20px;
+            border: 2px solid #0080ff;
+            border-radius: 8px;
+            background-color: #3a3a3a;
+        }
+        form div {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        form input {
+            padding: 8px;
+            border: 1px solid #464646;
+            border-radius: 4px;
+            background-color: #2b2b2b;
+            color: #ffffff;
+        }
+        form button {
+            padding: 8px;
+            background-color: #0080ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Arial", sans-serif;
+        }
+        form button:hover {
+            background-color: #0066cc;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .register-link a {
+            color: #0080ff;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            color: #0066cc;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/">
+        <h1>Login</h1>
+        {% if error %}
+            <p style="color: red;">Invalid username or password. Please try again.</p>
+        {% endif %}
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+        <div class="register-link">
+            <p>Don't have an account? <a href="/register">Register</a></p>
+        </div>
+    </form>
+</body>
+</html>

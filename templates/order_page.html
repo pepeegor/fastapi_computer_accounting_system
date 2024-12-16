@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Computer Accounting System</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #555;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            border-right: 1px solid #555;
+        }
+
+        th {
+            background-color: #222;
+            cursor: pointer;
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        h1, h2 {
+            margin-top: 20px;
+        }
+        .logout-form {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .logout-button {
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button {
+            padding: 8px;
+            background-color: #0080ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Arial", sans-serif;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-button:focus {
+            outline: none;
+        }
+        .back-button::before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-left: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            transform: rotate(-45deg);
+        }
+    </style>
+    <script>
+        function sortTable(tableId, columnIdx) {
+        var table = document.getElementById(tableId);
+        var rows = Array.from(table.getElementsByTagName("tr"));
+        var dataRows = rows.slice(1); // Exclude the first row (headers) from sorting
+
+        dataRows.sort(function(a, b) {
+            var aValue = a.cells[columnIdx].textContent;
+            var bValue = b.cells[columnIdx].textContent;
+
+            return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        var reverse = false;
+        if (table.classList.contains("sorted")) {
+            dataRows.reverse();
+            reverse = true;
+        }
+
+        table.classList.toggle("sorted");
+
+        dataRows.forEach(function(row) {
+            table.appendChild(row);
+        });
+
+        var headerCells = table.getElementsByTagName("th");
+        for (var i = 0; i < headerCells.length; i++) {
+            headerCells[i].innerHTML = headerCells[i].innerHTML.replace(" ▲", "").replace(" ▼", "");
+        }
+
+        var currentHeader = table.getElementsByTagName("th")[columnIdx];
+        if (reverse) {
+            currentHeader.innerHTML += " ▲";
+        } else {
+            currentHeader.innerHTML += " ▼";
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='/home_admin'"></button>
+    <h2 style="text-align: center;">Order</h2>
+
+
+
+    <table id="orderTable">
+        <tr>
+            <th onclick="sortTable('orderTable', 0)">Order ID</th>
+            <th onclick="sortTable('orderTable', 1)">Order Date</th>
+            <th onclick="sortTable('orderTable', 2)">Employee ID</th>
+            <th onclick="sortTable('orderTable', 3)">Component ID</th>
+        </tr>
+        {% for order in order_data %}
+        <tr>
+            <td>{{ order[0] }}</td>
+            <td>{{ order[1] }}</td>
+            <td>{{ order[2] }}</td>
+            <td>{{ order[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/order_page/clear" style="position: absolute; bottom: 10px; left: 10px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Clear</a>
+</body>
+</html>

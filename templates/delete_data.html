@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Data</title>
+    <style>
+        body {
+            background-color: #222;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #333;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .form-group select,
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+        }
+        .form-group input[type="submit"] {
+            background-color: #f44336;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #e63933;
+        }
+        .logout-form {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .logout-button {
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .home-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .home-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+            cursor: pointer;
+        }
+        .home-button:hover {
+            background-color: #0073e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="home-buttons">
+            <button class="home-button" onclick="window.location.href='/home_admin'">Home</button>
+        </div>
+        <div class="form-container">
+            <h1 class="form-title">Delete Data</h1>
+            <form action="/delete_data" method="POST">
+                <div class="form-group">
+                    <label for="table_name">Table Name:</label>
+                    <select id="table_name" name="table_name">
+                        <option value="Computer">Computer</option>
+                        <option value="ComputerComponent">ComputerComponent</option>
+                        <option value="Departments">Departments</option>
+                        <option value="Employee">Employee</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    <form class="logout-form" action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Data - Computer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+            padding: 40px;
+            border-radius: 5px;
+            background-color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 24px;
+        }
+        form div {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #fff;
+        }
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        form input[type="submit"] {
+            background-color: #0080ff;
+            border: none;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background-color: #0073e6;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-button:focus {
+            outline: none;
+        }
+        .back-button::before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(-45deg);
+        }
+        p.success-message {
+            color: green;
+            text-align: center;
+        }
+        p.error-message {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form action="/add_data/computer" method="POST">
+        <h1>Add Data - Computer</h1>
+        <div>
+            <label for="computer_model">Computer Model:</label>
+            <input type="text" id="computer_model" name="computer_model" required>
+        </div>
+        <div>
+            <label for="year_of_manufacture">Year of Manufacture:</label>
+            <input type="number" id="year_of_manufacture" name="year_of_manufacture" required>
+        </div>
+        <div>
+            <label for="employee_id">Employee ID:</label>
+            <input type="number" id="employee_id" name="employee_id" required>
+        </div>
+        <div>
+            <input type="submit" value="Submit">
+        </div>
+        <button class="back-button" onclick="window.location.href='/add_data'"></button>
+        {% if success %}
+            <p class="success-message">{{ success }}</p>
+        {% endif %}
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+    </form>
+</body>
+</html>

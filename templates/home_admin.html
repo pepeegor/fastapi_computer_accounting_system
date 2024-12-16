@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Computer Accounting System</title>
+    <script>
+        function sortTable(tableId, columnIdx) {
+            var table = document.getElementById(tableId);
+            var rows = Array.from(table.getElementsByTagName("tr"));
+            var dataRows = rows.slice(1);
+
+            dataRows.sort(function(a, b) {
+                var aValue = a.cells[columnIdx].textContent;
+                var bValue = b.cells[columnIdx].textContent;
+
+                return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            var reverse = false;
+            if (table.classList.contains("sorted")) {
+                dataRows.reverse();
+                reverse = true;
+            }
+
+            table.classList.toggle("sorted");
+
+            dataRows.forEach(function(row) {
+                table.appendChild(row);
+            });
+
+            var headerCells = table.getElementsByTagName("th");
+            for (var i = 0; i < headerCells.length; i++) {
+                headerCells[i].innerHTML = headerCells[i].innerHTML.replace(" ▲", "").replace(" ▼", "");
+            }
+
+            var currentHeader = table.getElementsByTagName("th")[columnIdx];
+            if (reverse) {
+                currentHeader.innerHTML += " ▲";
+            } else {
+                currentHeader.innerHTML += " ▼";
+            }
+        }
+
+        function searchTable(tableId) {
+            var input = document.getElementById(tableId + "-search");
+            var filter = input.value.toUpperCase();
+            var table = document.getElementById(tableId);
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var display = false;
+
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+
+                    if (cell) {
+                        var cellText = cell.textContent || cell.innerText;
+
+                        if (cellText.toUpperCase().indexOf(filter) > -1) {
+                            display = true;
+                            break;
+                        }
+                    }
+                }
+
+                rows[i].style.display = display ? "" : "none";
+            }
+
+            var headerRow = table.getElementsByTagName("tr")[0];
+            headerRow.style.display = ""; // Ensure the header row is always visible
+        }
+        document.getElementById('import-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', function() {
+            var fileInput = document.getElementById('file-input');
+            if (fileInput.files.length > 0) {
+                document.getElementById('upload-form').submit();
+            }
+        });
+    </script>
+    <style>
+    input[type="text"].search-field {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"].search-field:focus {
+            outline: none;
+        }
+
+    body {
+        background-color: #333;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #555;
+        margin-bottom: 20px; /* Add margin at the bottom for spacing */
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #555;
+        border-right: 1px solid #555;
+    }
+
+    th {
+        background-color: #222;
+        cursor: pointer;
+    }
+
+    th:last-child, td:last-child {
+        border-right: none;
+    }
+
+    h1, h2 {
+        margin-top: 20px;
+        text-align: center; /* Center align the headings */
+    }
+
+    .logout-form {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .logout-button {
+        padding: 10px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    .custom-form {
+        position: absolute;
+        top: 60px;
+        right: 205px;
+
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-form input[type="file"],
+    .custom-form button[type="submit"] {
+        display: none;
+    }
+
+    .custom-form label {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #777;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .custom-form button[type="submit"] {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #777;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <h1>Computer Accounting System</h1>
+
+    <a href="/add_data" style="position: absolute; top: 10px; right: 20px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Add data</a>
+    <a href="/delete_data" style="position: absolute; top: 10px; right: 140px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Delete data</a>
+    <a href="/order_page" style="position: absolute; top: 10px; right: 280px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Order History</a>
+    <a href="/export_data" style="position: absolute; top: 60px; right: 20px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Export</a>
+    <form id="upload-form" class="custom-form" action="/import_data" method="post" enctype="multipart/form-data">
+        <label for="file-input">Choose file</label>
+        <input type="file" name="file" id="file-input">
+        <button type="submit">Import</button>
+    </form>
+    <a href="/admin" style="position: absolute; top: 10px; left: 20px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Back to the admin panel</a>
+    <a href="/superadmin" style="position: absolute; top: 60px; left: 20px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Back to the superadmin panel</a>
+    <h2>Computer Data</h2>
+    <input type="text" id="computerTable-search" class="search-field" onkeyup="searchTable('computerTable')" placeholder="Search in Computer Data...">
+    <table id="computerTable">
+        <tr>
+            <th onclick="sortTable('computerTable', 0)">ID &#9650;</th>
+            <th onclick="sortTable('computerTable', 1)">Computer Model &#9650;</th>
+            <th onclick="sortTable('computerTable', 2)">Year of Manufacture &#9650;</th>
+            <th onclick="sortTable('computerTable', 3)">EmployeeID &#9650;</th>
+        </tr>
+        {% for computer in computer_data %}
+        <tr>
+            <td>{{ computer[0] }}</td>
+            <td>{{ computer[1] }}</td>
+            <td>{{ computer[2] }}</td>
+            <td>{{ computer[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Computer Component Data</h2>
+    <input type="text" id="componentTable-search" class="search-field" onkeyup="searchTable('componentTable')" placeholder="Search in Computer Component Data...">
+    <table id="componentTable">
+        <tr>
+            <th onclick="sortTable('componentTable', 0)">ID</th>
+            <th onclick="sortTable('componentTable', 1)">Component Type</th>
+            <th onclick="sortTable('componentTable', 2)">Component Model</th>
+            <th onclick="sortTable('componentTable', 3)">Manufacturer</th>
+            <th onclick="sortTable('componentTable', 4)">Computer ID</th>
+        </tr>
+        {% for computer_component in computer_component_data %}
+        <tr>
+            <td>{{ computer_component[0] }}</td>
+            <td>{{ computer_component[1] }}</td>
+            <td>{{ computer_component[2] }}</td>
+            <td>{{ computer_component[3] }}</td>
+            <td>{{ computer_component[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Departments</h2>
+    <input type="text" id="departmentTable-search" class="search-field" onkeyup="searchTable('departmentTable')" placeholder="Search in Departments...">
+    <table id="departmentTable">
+        <tr>
+            <th onclick="sortTable('departmentTable', 0)">ID</th>
+            <th onclick="sortTable('departmentTable', 1)">Department Name</th>
+        </tr>
+        {% for department in department_data %}
+        <tr>
+            <td>{{ department[0] }}</td>
+            <td>{{ department[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Employee</h2>
+    <input type="text" id="employeeTable-search" class="search-field" onkeyup="searchTable('employeeTable')" placeholder="Search in Employee...">
+    <table id="employeeTable">
+        <tr>
+            <th onclick="sortTable('employeeTable', 0)">ID</th>
+            <th onclick="sortTable('employeeTable', 1)">Last Name</th>
+            <th onclick="sortTable('employeeTable', 2)">First Name</th>
+            <th onclick="sortTable('employeeTable', 3)">Post</th>
+            <th onclick="sortTable('employeeTable', 4)">Department ID</th>
+        </tr>
+        {% for employee in employee_data %}
+        <tr>
+            <td>{{ employee[0] }}</td>
+            <td>{{ employee[1] }}</td>
+            <td>{{ employee[2] }}</td>
+            <td>{{ employee[3] }}</td>
+            <td>{{ employee[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="users-home-link">
+        <a href="/home" style=" bottom: 20px; left: 20px; padding: 10px 20px; background-color: #777; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Users home page</a>
+    </div>
+    <form class="logout-form" action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+    </form>
+</body>
+</html>
